@@ -1,6 +1,6 @@
-# iOS Portfolio
+# Project Portfolio
 
-A collection of iOS apps I've designed and built. Source code is kept private — this repo showcases the UI, architecture, and key features.
+Source code is kept private — this repo showcases the design, architecture, and key features of my projects.
 
 ---
 
@@ -45,6 +45,52 @@ A weather app for Denmark, built with real-time data from MET Nordic APIs. Desig
 ### Status
 
 In active development. Not yet on the App Store.
+
+---
+
+## MSc Thesis — Dynamic Fleet Allocation under Rolling-Horizon Last-Mile Delivery
+
+**DTU (Technical University of Denmark), 2026**
+
+A multi-day rolling-horizon framework for last-mile delivery that dynamically allocates computational budget and fleet resources under uncertainty. Orders arrive with multi-day service windows; the system decides daily which orders to attempt, then solves a constrained VRPTW routing problem within a limited compute budget.
+
+### Problem
+
+In last-mile delivery, orders have flexible delivery windows spanning multiple days. The challenge is to balance three competing objectives under limited computational time:
+- Minimize routing cost (distance/duration)
+- Minimize deadline failures and undelivered orders
+- Minimize plan instability (PlanChurn) across rolling re-planning days
+
+### Approach
+
+- **Rolling-horizon simulation** — day-by-day re-planning with carryover of undelivered orders
+- **Risk-gated allocation** — a risk gate that decides when to escalate compute budget based on system stress signals
+- **ALNS solver** — Adaptive Large Neighborhood Search for daily VRPTW routing with time windows, vehicle capacity, and shift constraints
+- **Learned allocator** — ML model (HGB / Ridge) trained offline to predict optimal compute-to-order allocation ratios
+- **Bandit-augmented allocator** — online learning layer that adapts the allocation policy in real time
+- **Sparse fail-safe bandit** — robust variant for out-of-distribution scenarios
+
+### Experiments
+
+| ID | Description |
+|----|-------------|
+| EXP00 | Business-as-usual baseline (no pressure) |
+| EXP01 | Crunch baseline (single-wave pressure, no risk gate) |
+| EXP02–04 | Static vs. dynamic compute allocation with risk gate |
+| EXP05–08 | Sensitivity analysis: capacity ratio, multi-trip, fleet parallelism, risk threshold |
+| EXP09 | Risk model ablation |
+| EXP12 | Offline learned allocator |
+| EXP13 | Online bandit-augmented allocator |
+| EXP14 | Sparse fail-safe bandit |
+| EXP15 | Out-of-distribution robustness evaluation |
+
+### Tech Stack
+
+- **Python** — simulation, solvers, ML pipeline
+- **OR-Tools / ALNS** — vehicle routing optimization
+- **scikit-learn** — HistGradientBoosting, Ridge regression for allocation models
+- **DTU HPC (LSF)** — experiment execution on cluster
+- **LaTeX** — thesis document
 
 ---
 
