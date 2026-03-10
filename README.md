@@ -48,49 +48,56 @@ In active development. Not yet on the App Store.
 
 ---
 
-## MSc Thesis — Dynamic Fleet Allocation under Rolling-Horizon Last-Mile Delivery
+## MSc Thesis — Rolling-Horizon Last-Mile Delivery Optimization
 
 **DTU (Technical University of Denmark), 2026**
 
-A multi-day rolling-horizon framework for last-mile delivery that dynamically allocates computational budget and fleet resources under uncertainty. Orders arrive with multi-day service windows; the system decides daily which orders to attempt, then solves a constrained VRPTW routing problem within a limited compute budget.
+Two parallel research tracks tackling the same multi-day last-mile delivery problem from different angles: one theoretical (learning-augmented compute allocation), one applied (rich VRPTW with exact methods).
 
 ### Problem
 
-In last-mile delivery, orders have flexible delivery windows spanning multiple days. The challenge is to balance three competing objectives under limited computational time:
-- Minimize routing cost (distance/duration)
+Orders arrive daily with flexible multi-day delivery windows. The system must decide each day which orders to attempt and how to route vehicles — under time-window, capacity, and depot constraints — while balancing three competing objectives:
+- Minimize routing cost (distance / duration)
 - Minimize deadline failures and undelivered orders
 - Minimize plan instability (PlanChurn) across rolling re-planning days
 
-### Approach
+### Track 1 — Learning-Augmented Compute Allocation (Theoretical)
 
+Focuses on how to dynamically allocate computational budget across planning days using machine learning.
+
+**Approach:**
 - **Rolling-horizon simulation** — day-by-day re-planning with carryover of undelivered orders
-- **Risk-gated allocation** — a risk gate that decides when to escalate compute budget based on system stress signals
-- **ALNS solver** — Adaptive Large Neighborhood Search for daily VRPTW routing with time windows, vehicle capacity, and shift constraints
-- **Learned allocator** — ML model (HGB / Ridge) trained offline to predict optimal compute-to-order allocation ratios
-- **Bandit-augmented allocator** — online learning layer that adapts the allocation policy in real time
+- **Risk-gated allocation** — escalates compute budget based on system stress signals
+- **ALNS solver** — Adaptive Large Neighborhood Search for daily VRPTW routing
+- **Learned allocator** — offline ML model (HistGradientBoosting / Ridge) predicting optimal compute-to-order ratios
+- **Bandit-augmented allocator** — online learning that adapts allocation policy in real time
 - **Sparse fail-safe bandit** — robust variant for out-of-distribution scenarios
 
-### Experiments
+**Experiments:** 15+ experiments covering baselines, dynamic allocation with risk gate, sensitivity sweeps (capacity ratio, multi-trip, fleet parallelism, risk threshold), ablation studies, and OOD robustness evaluation.
 
-| ID | Description |
-|----|-------------|
-| EXP00 | Business-as-usual baseline (no pressure) |
-| EXP01 | Crunch baseline (single-wave pressure, no risk gate) |
-| EXP02–04 | Static vs. dynamic compute allocation with risk gate |
-| EXP05–08 | Sensitivity analysis: capacity ratio, multi-trip, fleet parallelism, risk threshold |
-| EXP09 | Risk model ablation |
-| EXP12 | Offline learned allocator |
-| EXP13 | Online bandit-augmented allocator |
-| EXP14 | Sparse fail-safe bandit |
-| EXP15 | Out-of-distribution robustness evaluation |
+**Tech:** Python, ALNS, scikit-learn, DTU HPC (LSF)
 
-### Tech Stack
+### Track 2 — Rich VRPTW with Exact Methods (Applied)
 
-- **Python** — simulation, solvers, ML pipeline
-- **OR-Tools / ALNS** — vehicle routing optimization
-- **scikit-learn** — HistGradientBoosting, Ridge regression for allocation models
-- **DTU HPC (LSF)** — experiment execution on cluster
-- **LaTeX** — thesis document
+Focuses on solving the full-fidelity routing problem with heterogeneous fleet, multi-dimensional capacity, and depot resource constraints.
+
+**Approach:**
+- **Branch-and-Price framework** — column generation with restricted master problem for tight lower bounds
+- **ALNS + Set Partitioning recombination** — route-pool based intensification
+- **Julia/Gurobi backend** — exact solver for restricted master and pricing subproblems via Python-Julia bridge
+- **Depot resource modeling** — bucketed dock capacity, loading/unloading throughput, staging constraints
+- **Stability-aware re-planning** — churn penalties for day-assignment, vehicle, sequence, and depot-slot changes
+
+**Experiments:** resistance suite testing solver performance under increasing pressure (baseline, boundary, shifted, hard scenarios) across multiple seeds.
+
+**Tech:** Python, Julia, Gurobi, OR-Tools, OSRM road-network matrices, DTU HPC (LSF)
+
+### Shared Infrastructure
+
+- Real delivery data from Copenhagen area (Herlev benchmark)
+- OSRM-based travel time/distance matrices
+- LaTeX thesis document with DTU template
+- HPC job management via LSF batch scheduling
 
 ---
 
