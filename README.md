@@ -6,8 +6,8 @@ Some featured work is published as standalone repositories, while other projects
 
 If you want the fastest read of my work, start with:
 
+- [`dtu-thesis-workspace`](https://github.com/isjiajia01/dtu-thesis-workspace) — rolling-horizon delivery optimization thesis workspace
 - [`Nu`](https://github.com/isjiajia01/Nu) — native SwiftUI transit app portfolio project
-- [`cph-robust-transfers`](https://github.com/isjiajia01/cph-robust-transfers) — mobility resilience atlas and decision-support prototype
 - [`job-ops`](https://github.com/isjiajia01/job-ops) — self-hosted job-search operations system
 
 ---
